@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // window.prompt("Enter a Number(1-6):");
+    const enterNumber=()=> {
+        return new Promise((response,reject)=>{
+          const uNumber= Number(window.prompt("Enter a Number(1-6):"));
+          const rNumber=Math.floor(Math.random()*6+1);
+          if(isNaN(uNumber)||uNumber<0 || uNumber>6){
+             reject(new Error("something went wrong"));
+          }
+          if(uNumber===rNumber){
+              response({
+                  points:2,
+                  rNumber,
+              });
+          }else if(uNumber===rNumber+1||uNumber===rNumber-1){
+               response({
+                  points:1,
+                  rNumber,
+               });
+          }else{
+              response({
+                 points:0,
+                 rNumber,
+              });
+          }
+        });
+    };
+
+
+
+    const continueGame=()=>{
+        return new Promise((resolve)=>{
+         if(window.prompt("Do you want to continue...")){
+             resolve(true);
+         }else{
+             resolve(false);
+         }
+        });
+    };
+
+
+    const handleResult=()=>{
+        enterNumber()
+        .then((result)=>{
+           alert(`Dice:${result.rNumber}: you got ${result.points} points`);
+        continueGame()
+        .then((result)=>{
+           if(result){
+               handleResult();
+           }else{
+               alert("Game ends");
+           }
+        });
+    })
+      .catch((error)=> alert(error));   
+    };
+    handleResult();
+</script>
+</html>
